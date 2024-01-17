@@ -26,17 +26,18 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS')
+#ALLOWED_HOSTS = config('ALLOWED_HOSTS')
+ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = [
-    
+
     config('CSRF_TRUSTED_ORIGIN_1'),
     config('CSRF_TRUSTED_ORIGIN_2'),
     # remove last one before production
     config('CSRF_TRUSTED_ORIGIN_3'),
 ]
 
-CORS_ALLOWED_ORIGINS = [    
+CORS_ALLOWED_ORIGINS = [
     config('CORS_ALLOWED_ORIGIN_1'),
     config('CORS_ALLOWED_ORIGIN_2'),
     # remove last one before production
@@ -49,11 +50,11 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = False
 
 
-# site id 
+# site id
 SITE_ID = 1
 
 
-# security headers 
+# security headers
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -61,9 +62,8 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     ],
-     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DATETIME_FORMAT': '%d %b %Y',
@@ -78,8 +78,8 @@ REST_AUTH_SERIALIZERS = {
 }
 
 
-
 # Application definition
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -89,21 +89,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'cloudinary_storage',
     'django.contrib.staticfiles',
-    'cloudinary',    
+    'cloudinary',
     'corsheaders',
-    
+
     'rest_framework',
+    'rest_framework.authtoken',
     'drf_spectacular',
-    
+
     'users',
     'profiles',
     'posts',
     'comments',
     'likes',
     'followers',
-    
-    'utils',
+
 ]
+
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -142,13 +143,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 
-#DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
 
 
 # Password validation
