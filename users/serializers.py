@@ -1,29 +1,23 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
-
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
     confirm_password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
         fields = ('username', 'email', 'password', 'confirm_password')
+        extra_kwargs = {'password': {'write_only': True}}
 
-    def validate_username(self, value):
-        # check if the username is already taken
-        if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("This username is already in use!")
-        return value
-
-    def validate_email(self, value):
-        # check if the email address is already taken
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("the email adress is already taken!")
-        return value
+    def validate(self, data):
+        if data['password'] != data.pop('confirm_password'):
+            raise serializers.ValidationError({"password": "PasswordS don't match!"})
+        if User.objects.filter(username=data['username']).exists():
+            raise serializers.ValidationError({"username": "Username is already in use!"})
+        if User.objects.filter(email=data['email']).exists():
+            raise serializers.ValidationError({"email": "Email is already in use!"})
+        return data
 
     def create(self, validated_data):
-        validated_data.pop('confirm_password', None)
-        user = User.objects.create_user(**validated_data)
-        return user
+        return User.objects.create_user(**validated_data)
