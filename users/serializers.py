@@ -12,12 +12,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['password'] != data.pop('confirm_password'):
-            raise serializers.ValidationError({"password": "PasswordS don't match!"})
+            raise serializers.ValidationError({"confirm_password": "Passwords don't match!"})
         if User.objects.filter(username=data['username']).exists():
             raise serializers.ValidationError({"username": "Username is already in use!"})
         if User.objects.filter(email=data['email']).exists():
             raise serializers.ValidationError({"email": "Email is already in use!"})
         return data
-
+    
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)

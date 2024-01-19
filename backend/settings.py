@@ -29,29 +29,16 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 
 #ALLOWED_HOSTS = config('ALLOWED_HOSTS')
-ALLOWED_HOSTS = ['*']
-
-CSRF_TRUSTED_ORIGINS = [
-
-    config('CSRF_TRUSTED_ORIGIN_1'),
-    config('CSRF_TRUSTED_ORIGIN_2'),
-    # remove last one before production
-    config('CSRF_TRUSTED_ORIGIN_3'),
-]
-
-CORS_ALLOWED_ORIGINS = [
-    config('CORS_ALLOWED_ORIGIN_1'),
-    config('CORS_ALLOWED_ORIGIN_2'),
-    # remove last one before production
-    config('CORS_ALLOWED_ORIGIN_3'),
-]
-
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
+CSRF_TRUSTED_ORIGINS = [config('CSRF_TRUSTED_ORIGIN_1')]
+CORS_ALLOWED_ORIGINS = [config('CORS_ALLOWED_ORIGIN_1')]
 
 # CSRF & CORS
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = False
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = True
 
-
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = True
 # site id
 SITE_ID = 1
 
@@ -69,6 +56,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     'DATETIME_FORMAT': '%d %b %Y',
@@ -99,6 +87,7 @@ INSTALLED_APPS = [
     
     'rest_framework_simplejwt',
     'rest_framework',
+    "drf_standardized_errors",
     
     'drf_spectacular',
 
