@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'corsheaders',
     
+    
     'rest_framework_simplejwt',
     'rest_framework',
     "drf_standardized_errors",
@@ -97,9 +98,7 @@ INSTALLED_APPS = [
     'comments',
     'likes',
     'followers',
-
 ]
-
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -148,6 +147,7 @@ DATABASES = {
 }
 
 
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -186,8 +186,6 @@ USE_TZ = True
 STATIC_URL = "static/"
 
 STATIC_ROOT = BASE_DIR / 'static'
-
-
 STATICFILES_STORAGE = 'cloudinary_storage.storage.StaticHashedCloudinaryStorage'
 
 
