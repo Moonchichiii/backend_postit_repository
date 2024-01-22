@@ -19,5 +19,3 @@ class ProfileViewSet(viewsets.ModelViewSet):
         logger.info(f"Creating profile with data: {serializer.validated_data}")
         serializer.save(user=self.request.user)
 
-
-

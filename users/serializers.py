@@ -5,7 +5,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-    
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
     # unique email and username validation
@@ -14,7 +14,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id','username', 'email', 'password', 'confirm_password')
+        fields = ('id', 'username', 'email', 'password', 'confirm_password')
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate_password(self, value):
@@ -23,7 +23,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        # Extra check if passwords match, and then removed from data. 
+        # Extra check if passwords match, and then removed from data sent.  
         if data['password'] != data.pop('confirm_password'):
             raise ValidationError({'confirm_password': ["Passwords don't match."]})
         return data
@@ -54,7 +54,7 @@ class TokenObtainWithUserIdSerializer(TokenObtainPairSerializer):
         data["refresh"] = str(refresh)
         data["access"] = str(refresh.access_token)
 
-        # adding the user_id to the token response.
+        # adding the user_id to the token response
         data["user_id"] = self.user.id
 
         return data

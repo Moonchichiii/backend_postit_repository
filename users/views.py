@@ -9,7 +9,6 @@ from .serializers import UserRegistrationSerializer, TokenObtainWithUserIdSerial
 from rest_framework.exceptions import ValidationError
 
 
-
 class UserRegistrationView(CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
@@ -26,7 +25,7 @@ class UserRegistrationView(CreateAPIView):
                 value=str(refresh),
                 httponly=True,
                 samesite='None',
-                secure=False,  
+                secure=False,
             )
             response.data = {
                 'access': str(refresh.access_token),
@@ -34,6 +33,7 @@ class UserRegistrationView(CreateAPIView):
                 'message': 'Registration successful!'
             }
         return response
+
 
 class TokenObtainWithUserIdView(TokenObtainPairView):
     serializer_class = TokenObtainWithUserIdSerializer
