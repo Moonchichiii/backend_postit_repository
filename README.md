@@ -121,3 +121,124 @@ In the application, the primary entities are `users`, `profiles`, `posts`, `comm
 -   **Profile and Comments**: Each post can have many comments, linking back to both the post and the commenting profile.
 -   **Profile and Likes**: Profile can 'like' multiple posts, and each post can be 'liked' by multiple profiles.
 -   **Profile and Followers**: Profiles can follow and be followed by multiple other Profile, a network of connections.
+
+
+
+[Back to top](#table-of-contents)
+----------
+
+## API Endpoints
+
+-  GET /api/posts/: Retrieve a list of posts. -
+-  POST /api/posts/: Create a new post. Title and content in the request. -
+-  GET /api/posts/{id}/: Retrieve details of a specific post. -
+-  PUT /api/posts/{id}/: Update a specific post. Title and content in the request. -
+-  DELETE /api/posts/{id}/: Delete a specific post.
+
+[Back to top](#table-of-contents)
+----------
+
+## Technologies Used
+  
+The backend repository is built and managed using these technologies.
+-  Python: The core programming language of the project.
+-  Vs Code: Visual Studio Code editor.
+-  Django: A Python web framework employed for its ability to facilitate rapid development, serving as the backbone of the backend architecture.
+-  Heroku: Utilized as the cloud platform for deploying and hosting the application.
+
+-  PostgreSQL on Heroku: Reliability, serves as the primary database for the application, hosted on Heroku.
+-  Cloudinary: Integrated for management and hosting of images, ensuring optimized media storage and delivery.
+-  GitHub: Used for version control and source code management, tracking of changes throughout the development.
+
+[Back to top](#table-of-contents)
+----------
+
+## Dependencies
+
+Various libraries and frameworks used in this project:
+
+1.  asgiref==3.7.2: Provides asynchronous support to Django, enabling features like async views and middleware.
+2.  Django==5.0.1: The primary web framework used for building this application.
+3.  django-cors-headers==4.3.1: Manages Cross-Origin Resource Sharing (CORS) settings, allowing for controlled access from different domains.
+4.  djangorestframework==3.14.0: A powerful toolkit for building Web APIs, used for handling RESTful API endpoints.
+5.  python-decouple==3.8: Helps in separating configuration parameters from code, enhancing security and flexibility.
+6.  Pillow==10.1.0: A Python Imaging Library, used for image processing tasks in the application.
+7.  cloudinary==1.37.0: Integrates Cloudinary services for efficient image and media asset management.
+8.  dj3-cloudinary-storage==0.0.6: An extension for Cloudinary integration.
+9.  django-filter==23.5: Utilized for filtering querysets in Django views or Django REST Framework viewsets.
+10.  djangorestframework-simplejwt==5.3.1: Provides JSON Web Token (JWT) authentication for Django REST Framework.
+11.  drf-spectacular==0.27.0: A Django REST Framework extension for generating API documentation.
+12.  dj-database-url==2.1.0: Simplifies database configuration management, crucial for deployment scenarios.
+13.  gunicorn==21.2.0: A Python WSGI HTTP Server for UNIX, serving the Django application in production environments.
+14.  psycopg2-binary==2.9.9: A PostgreSQL database adapter, essential for PostgreSQL database integration.
+15.  pytz==2023.3: Provides timezone support for Django, important for time-sensitive applications.
+16.  sqlparse==0.4.2: A non-validating SQL parser, used for SQL formatting and parsing within Django.
+17.  urllib3==1.26.9: Used for making HTTP requests, integral for communicating with external services.
+18.  requests==2.26.0: A library for making HTTP requests.
+
+[Back to top](#table-of-contents)
+----------
+
+## Testing
+I've used Postman and Pytest for testing the project to make sure everything works.
+
+### Postman for API Testing
+Postman was used for checking the API endpoints. 
+
+User Registration:
+Method: POST
+
+<img src="register.png" alt="registration" width="320">
+
+
+
+User Login:
+Method: POST
+
+<img src="login" alt="login" width="320">
+
+
+
+User Logout:
+Method: POST
+
+<img src="logout" alt="logout" width="320">
+
+### Pytest for Unit Testing
+
+Pytest for unit testing.
+
+<img src="coverage" alt="coverage" width="320">
+
+
+
+[Back to top](#table-of-contents)
+----------
+
+## ## Deployment
+
+### Key Settings and Preparations
+
+Before deploying, check the following:
+
+-   Environment Variables: Sensitive information and configuration settings are managed using decouple. Ensures sensitive variables are not exposed in the codebase.
+-   Production Settings: Switch off any development settings, like DEBUG, for security and performance optimization.
+
+### Deployment Process
+
+The deployment involves the following steps:
+
+1.  Local Development: After making changes locally, push the updated code to GitHub.
+2.  GitHub to Heroku: Connect the GitHub repository to Heroku. This can be done via the Heroku dashboard.
+3.  Deploy on Heroku: Used Herokus dashboard to deploy the application. Allows for viewing of logs and managing deployments.
+4.  Monitoring: Post-deployment, Heroku logs are useful for monitoring and troubleshooting any issues not encountered during development.
+
+[Back to top](#table-of-contents)
+----------
+
+## Credits & Tutorials
+
+### README Management
+- [https://stackedit.io](https://stackedit.io/)
+
+[Back to top](#table-of-contents)
