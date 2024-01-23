@@ -42,7 +42,7 @@ Once logged in, users are directed to a dashboard with functionalities such as f
 
 
 
-<img src="dbschema" alt="database schema" width="320">
+<img src="https://github.com/Moonchichiii/backend_postit_repository/blob/main/readmecontent/images/dbvisual.png?raw=true" alt="database schema" width="320">
 
 
 [Back to top](#table-of-contents)
