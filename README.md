@@ -188,21 +188,15 @@ Postman was used for checking the API endpoints.
 User Registration:
 Method: POST
 
-<img src="register.png" alt="registration" width="320">
+<img src="https://github.com/Moonchichiii/backend_postit_repository/blob/main/readmecontent/images/Postman-finaltest%20registration.png?raw=true" alt="registration" width="320">
 
 
 
 User Login:
 Method: POST
 
-<img src="login" alt="login" width="320">
+<img src="https://github.com/Moonchichiii/backend_postit_repository/blob/main/readmecontent/images/Postman-token.png?raw=true" alt="login" width="320">
 
-
-
-User Logout:
-Method: POST
-
-<img src="logout" alt="logout" width="320">
 
 ### Pytest for Unit Testing
 
@@ -215,7 +209,7 @@ Pytest for unit testing.
 [Back to top](#table-of-contents)
 ----------
 
-## ## Deployment
+## Deployment
 
 ### Key Settings and Preparations
 
