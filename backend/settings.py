@@ -26,7 +26,7 @@ CLOUDINARY_STORAGE = {
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 #ALLOWED_HOSTS = config('ALLOWED_HOSTS')
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
@@ -85,7 +85,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'corsheaders',
     
-    
+    'django_filters',
     'rest_framework_simplejwt',
     'rest_framework',
     "drf_standardized_errors",

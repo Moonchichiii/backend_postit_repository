@@ -4,7 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework.exceptions import ValidationError
 from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
+from profiles.models import Profile
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
@@ -45,16 +45,20 @@ class TokenObtainWithUserIdSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         token['user_id'] = user.id
+
+        try:
+            profile = Profile.objects.get(user=user)
+            token['profile_id'] = profile.id
+        except Profile.DoesNotExist:
+            token['profile_id'] = None
+
         return token
 
     def validate(self, attrs):
         data = super().validate(attrs)
         refresh = self.get_token(self.user)
-
         data["refresh"] = str(refresh)
         data["access"] = str(refresh.access_token)
-
-        # adding the user_id to the token response
         data["user_id"] = self.user.id
-
+        data["profile_id"] = self.get_token(self.user).get('profile_id')
         return data

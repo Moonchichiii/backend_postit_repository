@@ -1,13 +1,10 @@
-from django.db import models
 from django.contrib.auth.models import User
-
-
-# Create your models here.
+from django.db import models
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    bio = models.TextField(blank=True)
-    profile_image = models.ImageField('image', default='default_pfp_ivf3fa')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    bio = models.TextField(blank=True)   
+    profile_image = models.URLField(default='7190932_ugiaz9.png')
 
     def __str__(self):
         return f'{self.user.username} Profile'
