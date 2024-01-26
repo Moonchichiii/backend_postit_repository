@@ -11,6 +11,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     """
     ViewSet for managing profiles.
     """
+
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = [IsOwnerOrReadOnly]
@@ -23,6 +24,7 @@ class ProfileUpdateView(APIView):
     """
     APIView for updating a profile.
     """
+
     permission_classes = [IsOwnerOrReadOnly]
 
     def post(self, request):
