@@ -8,4 +8,6 @@ router.register(r'', CommentViewSet, basename='comment')
 app_name = 'comments'
 urlpatterns = [
     path('', include(router.urls)),
+    path('api/posts/<int:post_id>/comments/', views.PostCommentsAPIView.as_view(), name='post-comments'),    
+    
 ]

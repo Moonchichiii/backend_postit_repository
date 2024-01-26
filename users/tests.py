@@ -19,11 +19,8 @@ class UserTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_login(self):        
-        
         User.objects.create_user(username='TestUser24211', email='TestUser22241@gmail.com', password='TestUser')
-        url = reverse('token_obtain_with_user_id')
-        data = {'username': 'testeruser', 'password': 'password'}
+        url = reverse('users:token_obtain_with_user_id')
+        data = {'username': 'TestUser24211', 'password': 'TestUser'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-
