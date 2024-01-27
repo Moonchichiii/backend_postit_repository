@@ -25,7 +25,7 @@ CLOUDINARY_STORAGE = {
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 #ALLOWED_HOSTS = config('ALLOWED_HOSTS')
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
@@ -136,14 +136,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 
-#DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
+DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
 
 
 
