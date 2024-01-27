@@ -1,15 +1,10 @@
 from rest_framework import serializers
-from .models import Post
+
 from cloudinary_storage.storage import MediaCloudinaryStorage
 
-from rest_framework import serializers
-from .models import Post
-from cloudinary_storage.storage import MediaCloudinaryStorage
-
-
-from .models import Post
 from comments.models import Comment
 from comments.serializers import CommentSerializer
+from .models import Post
 
 
 class PostSerializer(serializers.ModelSerializer):

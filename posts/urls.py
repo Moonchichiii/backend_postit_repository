@@ -6,12 +6,17 @@ from .views import PostViewSet
 from comments.views import CommentViewSet
 
 
+
 router = DefaultRouter()
 router.register(r'', PostViewSet, basename='post')  
 
 # routes for comments
 comments_router = routers.NestedSimpleRouter(router, r'', lookup='post')
+
+
 comments_router.register(r'comments', CommentViewSet, basename='post-comments')
+
+
 
 app_name = 'posts'
 

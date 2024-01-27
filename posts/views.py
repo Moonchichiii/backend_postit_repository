@@ -15,7 +15,7 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnlyForPost, IsOwnerOrReadOnly]
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ["title", "content", "time"]
+    search_fields = ["title"]
     filterset_fields = ["published", "created_at"]
 
     def list(self, request, *args, **kwargs):

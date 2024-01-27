@@ -9,8 +9,10 @@ from profiles.models import Profile
 class UserRegistrationSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
     # unique email and username validation
-    email = serializers.EmailField(validators=[UniqueValidator(queryset=User.objects.all(), message="Email is already in use!")])
-    username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all(), message="Username is already in use!")])
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all(), message="Email is already in use!")])
+    username = serializers.CharField(
+        validators=[UniqueValidator(queryset=User.objects.all(), message="Username is already in use!")])
 
     class Meta:
         model = User
@@ -18,12 +20,12 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate_password(self, value):
-        # validating password with django defualt validators. 
+        # validating password with django defualt validators.
         validate_password(value)
         return value
 
     def validate(self, data):
-        # Extra check if passwords match, and then removed from data sent.  
+        # Extra check if passwords match, and then removed from data sent.
         if data['password'] != data.pop('confirm_password'):
             raise ValidationError({'confirm_password': ["Passwords don't match."]})
         return data
@@ -36,7 +38,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             password=validated_data['password']
         )
         return user
-
 
 
 

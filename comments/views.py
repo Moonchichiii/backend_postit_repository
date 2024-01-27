@@ -10,6 +10,7 @@ from .models import Comment
 from .serializers import CommentSerializer
 from posts.models import Post
 
+
 # Create your views here.
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -22,9 +23,14 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         post_id = self.kwargs.get('post_pk')
+        print("post_id:", post_id)
+
         post = get_object_or_404(Post, pk=post_id)
         serializer.save(profile=self.request.user.profile, post=post)
 
+
+               
+    
 class PostCommentsAPIView(ListAPIView):
     """
     listing comments. 
@@ -33,7 +39,8 @@ class PostCommentsAPIView(ListAPIView):
 
     def get_queryset(self):
         post_id = self.kwargs['post_pk'] 
-        return Comment.objects.filter(post__id=post_id)
+        return Comment.objects.filter(
+            post_id=post_id).order_by('-created_at')
     
 
     
@@ -51,3 +58,6 @@ class PostCommentsAPIView(ListAPIView):
         comment = self.get_object()
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+    
+ 

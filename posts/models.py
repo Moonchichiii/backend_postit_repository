@@ -3,10 +3,6 @@ from django.db import models
 from profiles.models import Profile
 
 
-from django.db import models
-from django.contrib.auth.models import User
-from profiles.models import Profile
-
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, related_name='posts', on_delete=models.CASCADE)

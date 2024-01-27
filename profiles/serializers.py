@@ -6,7 +6,7 @@ from .models import Profile
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ["user", "bio", "profile_image"]
+        fields = ["user", "profile_image"]
 
     def validate_profile_image(self, value):
         """
