@@ -1,9 +1,10 @@
 from pathlib import Path
+from datetime import timedelta
+from decouple import config
 import cloudinary
 import cloudinary_storage
-from decouple import config
 import dj_database_url
-from datetime import timedelta
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,12 +26,12 @@ CLOUDINARY_STORAGE = {
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 #ALLOWED_HOSTS = config('ALLOWED_HOSTS')
 ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
-CSRF_TRUSTED_ORIGINS = [config('CSRF_TRUSTED_ORIGIN_1')]
-CORS_ALLOWED_ORIGINS = [config('CORS_ALLOWED_ORIGIN_1')]
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGIN_1').split(',')
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGIN_1').split(',')
 
 # CSRF & CORS
 CORS_ALLOW_ALL_ORIGINS = False
@@ -136,14 +137,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 
 
-DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
+#DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-#}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 

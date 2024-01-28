@@ -8,8 +8,7 @@ from profiles.models import Profile
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='liked_by')
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='likes')  
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('user','profile', 'post')
+        unique_together = ('user', 'post')

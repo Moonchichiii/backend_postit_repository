@@ -1,72 +1,47 @@
-from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from django.contrib.auth.password_validation import validate_password
 
-from rest_framework import generics
-from rest_framework.views import APIView
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework import status
+
+from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.views import APIView
 
 
-from .serializers import UserRegistrationSerializer, TokenObtainWithUserIdSerializer
-from profiles.models import Profile 
-
+from .serializers import UserRegistrationSerializer
 
 
 class UserRegistrationView(generics.CreateAPIView):
-    """
-    Api view user registration
-    """
+     # Queryset all user objects and using serializer for checks
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
 
-    class UserRegistrationView(generics.CreateAPIView):
-        queryset = User.objects.all()
-        serializer_class = UserRegistrationSerializer
-
-        def create(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Retrieving new user
+        if response.status_code == status.HTTP_201_CREATED:
+            
+            user = User.objects.get(username=response.data['username'])
             """
-            User registation with jwt token response
+            Generates the jwt tokens for the user both access and refresh token. 
+            giving the refresh token instantly to the user to avoid the user to login after the registration quick access instead. 
             """
-            response = super().create(request, *args, **kwargs)
-            if response.status_code == status.HTTP_201_CREATED:
-                
-                user = get_object_or_404(User, username=request.data.get('username'))
-                
-                try:
-                    profile = Profile.objects.get(user=user)
-                except Profile.DoesNotExist:
-                    profile = None
-
-                refresh = RefreshToken.for_user(user)
-
-                response.data = {
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token),
-                    'user': {
-                        'id': user.id,
-                        'username': user.username,
-                        'email': user.email
-                    },
-                    'profile_id': profile.id if profile else None  
-                }
-            return response
         
-        
-    
-class TokenObtainWithUserIdView(TokenObtainPairView):    
-    
-    serializer_class = TokenObtainWithUserIdSerializer
-
+            refresh = RefreshToken.for_user(user)
+            response.data.update({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'profile_id': user.profile.id if hasattr(user, 'profile') else None
+            })
+        return response
 
 
 class ChangePasswordView(APIView):
+     # limiting access for only authenticated users to do changes. 
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+          # post request to change password
         user = request.user
         new_password = request.data.get("new_password")
         try:
@@ -78,11 +53,12 @@ class ChangePasswordView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class DeleteAccountView(APIView):
+    # delete only for authenticated users
     permission_classes = [IsAuthenticated]
 
     def delete(self, request):
+          # delete request of users account
         user = request.user
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
