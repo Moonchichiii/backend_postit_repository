@@ -20,7 +20,10 @@ class UserTests(APITestCase):
 
     def test_login(self):        
         User.objects.create_user(username='TestUser24211', email='TestUser22241@gmail.com', password='TestUser')
-        url = reverse('users:token_obtain_with_user_id')
+        url = reverse('users:login')
         data = {'username': 'TestUser24211', 'password': 'TestUser'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        
+        
+        

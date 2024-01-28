@@ -7,4 +7,4 @@ class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
         fields = ['id', 'user', 'post', 'profile', 'profile_username', 'created_at']  
-        read_only_fields = ['user', 'post', 'created_at', 'profile', 'profile_username']  
+        read_only_fields = ['user', 'post', 'created_at', 'profile', 'profile_username']

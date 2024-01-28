@@ -25,7 +25,7 @@ class PostViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(
                 self.get_serializer(page, many=True).data
             )
-        return Response(self.get_serializer(queryset, many=True).data)
+        return Response(self.get_serializer(queryset, many=True).data)         
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

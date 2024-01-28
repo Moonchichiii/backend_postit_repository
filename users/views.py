@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 
 from rest_framework import generics, status
@@ -12,7 +13,7 @@ from .serializers import UserRegistrationSerializer
 
 
 class UserRegistrationView(generics.CreateAPIView):
-     # Queryset all user objects and using serializer for checks
+    # Queryset all user objects and using serializer for checks
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer
 
@@ -20,13 +21,13 @@ class UserRegistrationView(generics.CreateAPIView):
         response = super().create(request, *args, **kwargs)
         # Retrieving new user
         if response.status_code == status.HTTP_201_CREATED:
-            
+
             user = User.objects.get(username=response.data['username'])
             """
             Generates the jwt tokens for the user both access and refresh token. 
             giving the refresh token instantly to the user to avoid the user to login after the registration quick access instead. 
             """
-        
+
             refresh = RefreshToken.for_user(user)
             response.data.update({
                 'refresh': str(refresh),
@@ -36,12 +37,35 @@ class UserRegistrationView(generics.CreateAPIView):
         return response
 
 
+class UserLoginView(APIView):
+    def post(self, request, *args, **kwargs):
+        # Get username and password from request data
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        # Authenticate user
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            # User is authenticated, generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'user_id': user.id,
+                'profile_id': user.profile.id if hasattr(user, 'profile') else None
+            })
+        else:
+            # Authentication failed
+            return Response({'error': 'Authentication failed'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
 class ChangePasswordView(APIView):
-     # limiting access for only authenticated users to do changes. 
+    # limiting access for only authenticated users to do changes.
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-          # post request to change password
+        # post request to change password
         user = request.user
         new_password = request.data.get("new_password")
         try:
@@ -58,10 +82,7 @@ class DeleteAccountView(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request):
-          # delete request of users account
+        # delete request of users account
         user = request.user
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
-    
-    
