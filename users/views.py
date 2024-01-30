@@ -49,15 +49,17 @@ class UserLoginView(APIView):
         if user is not None:
             # User is authenticated, generate JWT tokens
             refresh = RefreshToken.for_user(user)
+            profile_id = user.profile.id if hasattr(user, 'profile') else None
             return Response({
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
                 'user_id': user.id,
-                'profile_id': user.profile.id if hasattr(user, 'profile') else None
+                'profile_id': profile_id
             })
         else:
             # Authentication failed
             return Response({'error': 'Authentication failed'}, status=status.HTTP_401_UNAUTHORIZED)
+
 
 
 class ChangePasswordView(APIView):

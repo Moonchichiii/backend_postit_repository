@@ -48,3 +48,18 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(profile=self.request.user.profile)
+    
+    
+    def liked_post(self, request):
+        
+        liked_post = Post.objects.filter(published=True).order_by('-likes_count').first()
+
+        if liked_post:
+            serializer = PostSerializer(liked_post)
+            return Response(serializer.data)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+
+    

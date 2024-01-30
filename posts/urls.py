@@ -21,7 +21,6 @@ likes_router = routers.NestedSimpleRouter(router, r'', lookup='post')
 likes_router.register(r'likes', LikeViewSet, basename='post-likes')
 
 
- 
 app_name = 'posts'
 urlpatterns = [
     path('', include(router.urls)),

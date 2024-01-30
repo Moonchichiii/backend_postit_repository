@@ -8,11 +8,11 @@ from .models import Post
 class PostSerializer(serializers.ModelSerializer):
     profile_username = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
-    likes = LikeSerializer(many=True, read_only=True)
+    likes_count = serializers.SerializerMethodField()
     post_image = serializers.ImageField(write_only=True, required=False)
     ingredients = serializers.CharField(required=False, allow_blank=True)
     recipe = serializers.CharField(required=False, allow_blank=True)
-
+    
 
     class Meta:
         model = Post
@@ -71,3 +71,6 @@ class PostSerializer(serializers.ModelSerializer):
         """
         comments = Comment.objects.filter(post=obj).order_by('-created_at')[:5]
         return CommentSerializer(comments, many=True).data
+    
+    def get_likes_count(self, obj):
+        return obj.liked_by.count()

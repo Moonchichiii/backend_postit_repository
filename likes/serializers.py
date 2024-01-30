@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Like
+from profiles.models import Profile
 
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,5 +11,8 @@ class LikeSerializer(serializers.ModelSerializer):
     def create(self, validated_data):        
         return super().create(validated_data)
     
-    
-    
+    def get_profile_username(self, obj):
+        """
+        username with most likes. 
+        """
+        return obj.profile.user.username if obj.profile else None
