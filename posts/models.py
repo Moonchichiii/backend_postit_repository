@@ -4,13 +4,14 @@ from profiles.models import Profile
 
 
 class Post(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     profile = models.ForeignKey(Profile, related_name='posts', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)    
     updated_at = models.DateTimeField(auto_now=True)
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    image = models.ImageField(upload_to='images/', default='7190932_ugiaz9.png', blank=True)
+    title = models.CharField(max_length=255)    
+    ingredients = models.TextField(blank=True, null=True)
+    recipe = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='images/', default='7190932_ugiaz9.png', blank=True)    
+    image_url = models.URLField(blank=True) 
     published = models.BooleanField(default=False)
     time = models.IntegerField(default=0)
 
@@ -18,5 +19,4 @@ class Post(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-
-        return f'Post {self.id}: {self.title}'
+        return f'Post {self.pk}: {self.title}'

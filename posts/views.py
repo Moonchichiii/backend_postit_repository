@@ -47,4 +47,4 @@ class PostViewSet(viewsets.ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user, profile=self.request.user.profile)
+        serializer.save(profile=self.request.user.profile)

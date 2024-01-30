@@ -1,23 +1,25 @@
 from rest_framework import serializers
-
 from comments.models import Comment
 from comments.serializers import CommentSerializer
 from likes.models import Like
-from likes.serializers import LikeSerializer  
+from likes.serializers import LikeSerializer
 from .models import Post
 
 class PostSerializer(serializers.ModelSerializer):
     profile_username = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
     likes = LikeSerializer(many=True, read_only=True)
+    post_image = serializers.ImageField(write_only=True, required=False)
+    ingredients = serializers.CharField(required=False, allow_blank=True)
+    recipe = serializers.CharField(required=False, allow_blank=True)
+
 
     class Meta:
         model = Post
-        fields = "__all__"
+        fields = '__all__'
         extra_kwargs = {
-            "user": {"read_only": True},
-            "profile": {"read_only": True},
-            "image": {"required": False}
+            'profile': {'read_only': True},    
+            "image": {"required": False},
         }
 
     def get_profile_username(self, obj):
@@ -39,17 +41,30 @@ class PostSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        """
-        post creation. 
-        """
-        return super().create(validated_data)
+        image = validated_data.pop("post_image", None)
+        post = super().create(validated_data)
+        if image:
+            post.image = image 
+            post.save()
+        return post
 
     def update(self, instance, validated_data):
-        """
-        updates existing post
-        """
-        return super().update(instance, validated_data)
+        image = validated_data.pop("post_image", None)
+        post = super().update(instance, validated_data) 
     
+        if image:
+            post.image = image  
+            post.save()  
+        return post
+
+    def save_image_url(self, instance, image):
+        """
+        Saving the posts image url. 
+        """
+        instance.image = image
+        instance.image_url = image.url
+        instance.save()
+
     def get_comments(self, obj):
         """
         limits the comments returned to 5 based on date. 

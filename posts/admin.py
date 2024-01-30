@@ -4,7 +4,7 @@ from .models import Post
 # Register your models here.
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'user', 'created_at', 'published']
+    list_display = ['title', 'profile', 'created_at', 'published']
     list_filter = ['published', 'created_at']
     search_fields = ['title', 'content']
     actions = ['make_published']

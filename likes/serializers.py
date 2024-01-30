@@ -2,9 +2,13 @@ from rest_framework import serializers
 from .models import Like
 
 class LikeSerializer(serializers.ModelSerializer):
-    profile_username = serializers.ReadOnlyField(source='profile.user.username')  
-
     class Meta:
         model = Like
-        fields = ['id', 'user', 'post', 'profile', 'profile_username', 'created_at']  
-        read_only_fields = ['user', 'post', 'created_at', 'profile', 'profile_username']
+        fields = ['id', 'profile', 'post', 'created_at']
+        read_only_fields = ['profile', 'post', 'created_at']
+
+    def create(self, validated_data):        
+        return super().create(validated_data)
+    
+    
+    
