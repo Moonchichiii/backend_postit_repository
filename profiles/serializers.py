@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from cloudinary_storage.storage import MediaCloudinaryStorage
 from .models import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
