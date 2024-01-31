@@ -1,17 +1,57 @@
-from rest_framework import viewsets
+from django_filters.rest_framework import DjangoFilterBackend
 
-from profiles.models import Profile
+from rest_framework import generics, filters
 
-from utils.permissions import IsOwnerOrReadOnly
+from followers.models import Follower
+
+from .models import Profile
 from .serializers import ProfileSerializer
+from utils.permissions import IsOwnerOrReadOnly
 
-class ProfileViewSet(viewsets.ModelViewSet):
+
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, filters
+
+from followers.models import Follower
+from .models import Profile
+from .serializers import ProfileSerializer
+from utils.permissions import IsOwnerOrReadOnly
+
+
+class ProfileList(generics.ListAPIView):
     """
-    A ViewSet for managing user profiles.
+    List profiles of users you are following and your own profile.
     """
-    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    filter_backends = [
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    ]
+    filterset_fields = [
+        'user__following__followed__profile',
+        'user__followed__profile',
+    ]
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+
+            following_profiles = Follower.objects.filter(profile=user).values_list('followed__profile', flat=True)
+            return Profile.objects.filter(pk__in=following_profiles).order_by('-created_at') | Profile.objects.filter(pk=user.profile.pk)
+        else:
+            return Profile.objects.none()
+
+class ProfileDetail(generics.RetrieveUpdateAPIView):
+    """
+    Retrieve or update your own profile.
+    """
+    permission_classes = [IsOwnerOrReadOnly]
+    serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+
+            return Profile.objects.filter(pk=user.profile.pk)
+        else:
+            return Profile.objects.none()
