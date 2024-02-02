@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .models import Like
 from .serializers import LikeSerializer
@@ -29,7 +29,7 @@ class LikeList(generics.ListCreateAPIView):
     """
     List likes for a post
     """
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [AllowAny]
     serializer_class = LikeSerializer
     
     def get_queryset(self):

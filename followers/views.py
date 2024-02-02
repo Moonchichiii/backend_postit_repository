@@ -1,4 +1,5 @@
-from rest_framework import generics, permissions
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Follower
 from .serializers import FollowerSerializer
@@ -9,12 +10,18 @@ from .serializers import FollowerSerializer
 class FollowerList(generics.ListCreateAPIView):
     queryset = Follower.objects.all()
     serializer_class = FollowerSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self): 
+     return Follower.objects.filter(followed=self.request.user)
 
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+    def perform_create(self, serializer):        
+        serializer.save(profile=self.request.user)
+        
+        
+        
 
 class FollowerDetail(generics.RetrieveDestroyAPIView):
     queryset = Follower.objects.all()
     serializer_class = FollowerSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]

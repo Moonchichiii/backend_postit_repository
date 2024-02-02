@@ -15,4 +15,4 @@ class Follower(models.Model):
         unique_together = ['profile', 'followed']
 
     def __str__(self):
-        return f'{self.profile.username} follows {self.followed.username}'
+        return f'{self.profile.username} follows {self.followed.username}'                                          
