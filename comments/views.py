@@ -12,10 +12,13 @@ class CommentViewSet(viewsets.ModelViewSet):
     Ensures that only authenticated users can interact with comments.
     """
     permission_classes = [IsAuthenticated]
-    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
     def perform_create(self, serializer):
-       post_id = self.kwargs.get('post_pk')
-       post = get_object_or_404(Post, pk=post_id)
-       serializer.save(profile=self.request.user.profile, post=post)
+        post_id = self.kwargs.get('post_pk')
+        post = get_object_or_404(Post, pk=post_id)
+        serializer.save(profile=self.request.user.profile, post=post)
+
+    def get_queryset(self):
+        post_id = self.kwargs['post_pk']
+        return Comment.objects.filter(post_id=post_id)

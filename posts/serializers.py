@@ -5,7 +5,7 @@ from likes.models import Like
 from likes.serializers import LikeSerializer
 from .models import Post
 
-class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(serializers.ModelSerializer):    
     profile_username = serializers.SerializerMethodField()
     comments = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()

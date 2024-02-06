@@ -2,17 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from profiles.models import Profile
 
-# Create your models here.
-
-
 class Follower(models.Model):
-    profile = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
-    followed = models.ForeignKey(User, related_name='followed', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
+    followed_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='followers')
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['-created_at']
-        unique_together = ['profile', 'followed']
+        unique_together = (('user', 'followed_profile'),)
 
     def __str__(self):
-        return f'{self.profile.username} follows {self.followed.username}'                                          
+        return f'{self.user.username} follows {self.followed_profile.user.username}'

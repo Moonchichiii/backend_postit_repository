@@ -14,7 +14,7 @@ from .utils.auth import jwt_token_generation
 
 class UserRegistrationView(generics.CreateAPIView):
     """
-     Queryset all user objects and using serializer for checks
+    Queryset all user objects and using serializer for checks
     """
     queryset = User.objects.all()
     serializer_class = UserRegistrationSerializer

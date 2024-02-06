@@ -5,6 +5,5 @@ app_name = 'followers'
 
 urlpatterns = [
     path('followers/', FollowerList.as_view(), name='follower-list'),
-    path('followers/<int:pk>/', FollowerDetail.as_view(), name='follower-detail'), 
+    path('<int:pk>/', FollowerDetail.as_view(), name='follower-detail'),
 ]
-

@@ -1,66 +1,40 @@
 from django.db.models import Count
-
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import generics, filters
+from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from django.db.models import Exists, OuterRef
-from followers.models import Follower
-from .models import Profile
+from profiles.models import Profile
 from .serializers import ProfileSerializer
 
-from utils.permissions import IsOwnerOrReadOnly
+from .models import Profile
 
+# Create your views here.
 
 class ProfileDetail(generics.RetrieveUpdateAPIView):
     """
     Retrieve or update your own profile.
     """
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated]
     serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()
 
     def get_object(self):
         return self.request.user.profile
 
 
-
 class ProfileList(generics.ListAPIView):
-    """
-    List profiles of users you are following and your own profile.
-    """
-    serializer_class = ProfileSerializer
-    filter_backends = [
-        filters.OrderingFilter,
-        DjangoFilterBackend,
-    ]
     permission_classes = [IsAuthenticated]
-    filterset_fields = [
-        'user__following__followed__profile',
-        'user__followed__profile',
-    ]
-
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_authenticated:
-            
-            return Profile.objects.annotate(
-                is_following=Exists(
-                    Follower.objects.filter(
-                        profile=user.profile,
-                        followed=OuterRef('user')
-                    )
-                )
-            ).order_by('-created_at')
-        return Profile.objects.none()
-
-
-
-class PopularProfileList(generics.ListAPIView):
     serializer_class = ProfileSerializer
+    queryset = Profile.objects.annotate(
+        posts_count=Count('posts', distinct=True), 
+        followers_count=Count('followers', distinct=True),
+        following_count=Count('user__following', distinct=True),
+    ).order_by('-created_at')
+
+
+
+class CurrentUserProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return Profile.objects.annotate(
-            followers_count=Count('followed')
-        ).order_by('-followers_count')
-
+    def get(self, request, *args, **kwargs):
+        serializer = ProfileSerializer(request.user.profile)
+        return Response(serializer.data)
