@@ -51,11 +51,13 @@ class PostSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         image = validated_data.pop("post_image", None)
         post = super().update(instance, validated_data) 
+        
     
         if image:
             post.image = image  
             post.save()  
         return post
+        
 
     def save_image_url(self, instance, image):
         """

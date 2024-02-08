@@ -9,23 +9,25 @@ User = get_user_model()
 
 
 class FollowerSerializer(serializers.ModelSerializer):
-    followed_profile = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all(), write_only=True)
-    following_id = serializers.SerializerMethodField()
+    followed_profile = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all(), write_only=True)    
+    user_username = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = Follower
-        fields = ['id', 'user', 'followed_profile', 'following_id']
+        fields = ['id', 'user', 'followed_profile','user_username']
         extra_kwargs = {
             'user': {'read_only': True},
         }
 
-    def create(self, validated_data):
+    def create(self, validated_data):        
         user = self.context['request'].user
         followed_profile = validated_data['followed_profile']
         instance, created = Follower.objects.get_or_create(user=user, followed_profile=followed_profile)
         return instance
+        
 
     def validate(self, data):
+        
         user = self.context['request'].user
         followed_profile = data['followed_profile']
         if user == followed_profile.user:
@@ -33,8 +35,3 @@ class FollowerSerializer(serializers.ModelSerializer):
         if Follower.objects.filter(user=user, followed_profile=followed_profile).exists():
             raise serializers.ValidationError("The user is already following this profile.")
         return data
-
-    def get_following_id(self, obj):
-        user_following = obj.user.following.all()
-        followed_profiles_ids = user_following.values_list('followed_profile_id', flat=True)
-        return list(followed_profiles_ids)

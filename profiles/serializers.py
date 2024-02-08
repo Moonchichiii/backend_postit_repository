@@ -8,8 +8,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')
     profile_image = serializers.ImageField(write_only=True, required=False)
     profile_image_url = serializers.SerializerMethodField()    
-    profile_owner = serializers.SerializerMethodField(method_name='get_is_profile_owner')
-    following_id = serializers.SerializerMethodField()
+    profile_owner = serializers.SerializerMethodField(method_name='get_is_profile_owner')    
     posts_count = serializers.ReadOnlyField()
     followers_count = serializers.ReadOnlyField()
     following_count = serializers.ReadOnlyField()
@@ -37,9 +36,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         request = self.context.get('request', None)
         return obj.user == request.user if request and request.user.is_authenticated else False
 
-    def get_following_id(self, obj):
-        following_ids = obj.user.following.all().values_list('followed_profile_id', flat=True)
-        return list(following_ids)
     
     class Meta:
         model = Profile
@@ -50,6 +46,6 @@ class ProfileSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
             'id', 'user', 
-            'profile_owner', 'following_id',
+            'profile_owner', 
             'posts_count', 'followers_count', 'following_count',
         ]
